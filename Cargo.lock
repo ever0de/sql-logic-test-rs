@@ -512,6 +512,7 @@ dependencies = [
  "eyre",
  "sqlite",
  "sqllogictest",
+ "thiserror",
 ]
 
 [[package]]

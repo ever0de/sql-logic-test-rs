@@ -5,6 +5,7 @@ edition = "2021"
 authors = ["Jiseok CHOI <jiseok.dev@gmail.com>"]
 
 [dependencies]
-eyre = "0.6.8"
+eyre = "0.6"
 sqlite = "0.30"
 sqllogictest = { path = "./sqllogictest-rs/sqllogictest", version = "0.10" }
+thiserror = "1"
