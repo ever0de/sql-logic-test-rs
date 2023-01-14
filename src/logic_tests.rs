@@ -36,7 +36,7 @@ impl sqllogictest::DB for Sqlite {
         let query: Query = sql
             .split_whitespace()
             .next()
-            .expect(&format!("sql is empty: {sql}"))
+            .unwrap_or_else(|| panic!("sql is empty: {sql}"))
             .parse()
             .unwrap();
 

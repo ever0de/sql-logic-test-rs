@@ -34,7 +34,7 @@ impl Record {
     }
 
     pub fn value_to_string(&self) -> String {
-        format!("{}", self.value)
+        self.value.to_string()
     }
 }
 
