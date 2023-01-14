@@ -86,6 +86,18 @@ mod tests {
 
     #[test]
     fn select() {
+        // invalid slt code
+        //
+        // hash-threshold 3
+        // query I
+        // select * from example_basic
+        // ----
+        // 3 values hashing to b5b44edac84d34d6af3be2a88bfae352
+        // # FIXME: the origin data is below.. Why..?
+        // # Alice
+        // # Bob
+        // # Eve
+
         let storage = Sqlite::new();
         let mut tester = sqllogictest::Runner::new(storage);
 
