@@ -1,0 +1,6 @@
+[submodule "sqllogictest"]
+	path = sqllogictest
+	url = git@github.com:gregrahn/sqllogictest.git
+[submodule "sqllogictest-rs"]
+	path = sqllogictest-rs
+	url = git@github.com:risinglightdb/sqllogictest-rs.git
