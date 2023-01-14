@@ -6,4 +6,4 @@ authors = ["Jiseok CHOI <jiseok.dev@gmail.com>"]
 
 [dependencies]
 sqlite = "0.30"
-sqllogictest = "0.10.0"
+sqllogictest = { path = "../sqllogictest-rs/sqllogictest", version = "0.10" }
