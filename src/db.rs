@@ -1,3 +1,5 @@
+use std::vec::IntoIter;
+
 pub use crate::std_ext::*;
 use sqlite::{Connection, State, Statement};
 
@@ -10,6 +12,16 @@ pub struct Row {
     pub record: Vec<Record>,
 }
 
+impl IntoIterator for Row {
+    type Item = Record;
+
+    type IntoIter = IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.record.into_iter()
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Record {
     pub label: String,
@@ -19,6 +31,10 @@ pub struct Record {
 impl Record {
     pub fn new(label: String, value: String) -> Self {
         Self { label, value }
+    }
+
+    pub fn value_to_string(&self) -> String {
+        format!("{}", self.value)
     }
 }
 

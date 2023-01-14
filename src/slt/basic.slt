@@ -1,0 +1,45 @@
+statement ok
+create table example_basic(name Text)
+
+statement ok
+insert into example_basic values("Alice"), ("Bob"), ("Eve")
+
+query I
+select * from example_basic
+----
+Alice
+Bob
+Eve
+
+statement ok
+create table t(a int, b int, c int)
+
+statement ok
+drop table t
+
+hash-threshold 3
+
+query I
+select * from example_basic
+----
+3 values hashing to b5b44edac84d34d6af3be2a88bfae352
+# FIXME: the origin data is below.. Why..?
+# Alice
+# Bob
+# Eve
+
+hash-threshold 1
+
+query I
+select * from example_basic
+----
+3 values hashing to b5b44edac84d34d6af3be2a88bfae352
+
+hash-threshold 0
+
+query I
+select * from example_basic
+----
+Alice
+Bob
+Eve
