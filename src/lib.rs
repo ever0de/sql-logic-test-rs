@@ -10,7 +10,19 @@ pub struct Sqlite {
 
 #[derive(Clone, Debug, Default)]
 pub struct Row {
-    record: Vec<String>,
+    pub record: Vec<Record>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct Record {
+    pub label: String,
+    pub value: String,
+}
+
+impl Record {
+    pub fn new(label: String, value: String) -> Self {
+        Self { label, value }
+    }
 }
 
 impl Row {
@@ -18,7 +30,7 @@ impl Row {
         Default::default()
     }
 
-    pub fn push(&mut self, record: String) -> &mut Self {
+    pub fn push(&mut self, record: Record) -> &mut Self {
         self.record.push(record);
         self
     }
@@ -52,7 +64,8 @@ impl Sqlite {
 
             let mut row = Row::new();
             for field in fields.as_ref() {
-                let record = stmt.read::<String, _>(field.as_ref())?;
+                let value = stmt.read::<String, _>(field.as_ref())?;
+                let record = Record::new(field.to_string(), value);
                 row.push(record);
             }
 
@@ -85,9 +98,16 @@ mod tests {
             .execute("INSERT INTO test (name) VALUES ('test')")
             .unwrap();
 
-        let rows = sqlite.select("SELECT * FROM test", ["id", "name"]).unwrap();
+        let fields = ["id", "name"];
+        let rows = sqlite.select("SELECT * FROM test", fields).unwrap();
         assert_eq!(rows.len(), 1);
-        assert_eq!(rows[0].record[0], "1");
-        assert_eq!(rows[0].record[1], "test");
+        assert_eq!(
+            rows[0].record[0],
+            Record::new("id".to_owned(), "1".to_owned())
+        );
+        assert_eq!(
+            rows[0].record[1],
+            Record::new("name".to_owned(), "test".to_owned())
+        );
     }
 }
