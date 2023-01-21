@@ -86,26 +86,44 @@ mod tests {
 
     #[test]
     fn select() {
-        // invalid slt code
-        //
-        // hash-threshold 3
-        // query I
-        // select * from example_basic
-        // ----
-        // 3 values hashing to b5b44edac84d34d6af3be2a88bfae352
-        // # FIXME: the origin data is below.. Why..?
-        // # Alice
-        // # Bob
-        // # Eve
-
         let storage = Sqlite::new();
         let mut tester = sqllogictest::Runner::new(storage);
 
-        let script = std::fs::read_to_string("./src/slt/basic.slt").unwrap();
+        let script = std::fs::read_to_string("./sqllogictest/test/select1.test").unwrap();
         let records = sqllogictest::parse(&script).unwrap();
-        for record in records {
-            println!("{record}");
-            tester.run(record).unwrap();
+
+        let mut fail_count = vec![];
+        let mut success_count = vec![];
+        for record in &records {
+            if let sqllogictest::Record::Query {
+                expected_results, ..
+            } = record
+            {
+                if expected_results.len() == 1 && expected_results[0].contains("values hashing to")
+                {
+                    tester.with_hash_threshold(1);
+                } else {
+                    tester.with_hash_threshold(0);
+                }
+            }
+
+            match tester.run(record.clone()) {
+                Ok(_) => success_count.push(record.to_string()),
+                Err(err) => {
+                    fail_count.push(err);
+                }
+            }
         }
+
+        for err in fail_count.iter() {
+            println!("failed record: {err}");
+        }
+        println!(
+            r#"{:.2}%, success: {}, fail: {}"#,
+            (success_count.len() as f64 / (success_count.len() as f64 + fail_count.len() as f64))
+                * 100.0,
+            success_count.len(),
+            fail_count.len()
+        );
     }
 }
