@@ -85,6 +85,14 @@ mod tests {
     use super::*;
 
     #[test]
+    fn basic() {
+        let storage = Sqlite::new();
+        let mut tester = sqllogictest::Runner::new(storage);
+
+        tester.run_file("./src/slt/basic.slt").unwrap();
+    }
+
+    #[test]
     fn select() {
         let storage = Sqlite::new();
         let mut tester = sqllogictest::Runner::new(storage);
