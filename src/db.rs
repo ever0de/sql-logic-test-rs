@@ -34,7 +34,7 @@ impl Record {
     }
 
     pub fn value_to_string(&self) -> String {
-        self.value.to_string()
+        self.value.clone()
     }
 }
 
