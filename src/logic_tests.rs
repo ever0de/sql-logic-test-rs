@@ -80,6 +80,22 @@ impl sqllogictest::DB for Sqlite {
     }
 }
 
+pub fn validator(actual: &[Vec<String>], expected: &[String]) -> bool {
+    if expected.len() == 1 && expected[0].contains("values hashing to") {
+        // println!("{:?} == {expected:?}", actual[0]);
+        return actual[0][0] == expected[0];
+    }
+
+    let normalized_rows = actual
+        .iter()
+        .flat_map(|text| text.to_owned())
+        .collect::<Vec<_>>();
+
+    // println!("{normalized_rows:?} != {expected:?}");
+
+    normalized_rows == expected
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -96,6 +112,7 @@ mod tests {
     fn select() {
         let storage = Sqlite::new();
         let mut tester = sqllogictest::Runner::new(storage);
+        tester.with_validator(validator);
 
         let script = std::fs::read_to_string("./sqllogictest/test/select1.test").unwrap();
         let records = sqllogictest::parse(&script).unwrap();
@@ -133,5 +150,7 @@ mod tests {
             success_count.len(),
             fail_count.len()
         );
+
+        assert_eq!(fail_count.len(), 0, "failed records: {fail_count:?}")
     }
 }
