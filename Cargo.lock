@@ -598,6 +598,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "sql-logic-test"
+version = "0.1.0"
+dependencies = [
+ "eyre",
+ "glob",
+ "sqlite",
+ "sqllogictest",
+ "thiserror",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "sqlite"
 version = "0.30.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -605,17 +618,6 @@ checksum = "12e072cb5fb89b3fe5e9c9584676348feb503f9fb3ae829d9868171bc5372d48"
 dependencies = [
  "libc",
  "sqlite3-sys",
-]
-
-[[package]]
-name = "sqlite-logic-test-rs"
-version = "0.1.0"
-dependencies = [
- "eyre",
- "sqlite",
- "sqllogictest",
- "thiserror",
- "tracing",
 ]
 
 [[package]]
@@ -726,6 +728,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d050e60b33d41c19108b32cea32164033a9013fe3b46cbd4457559bfbf77afaa"
 dependencies = [
  "num_cpus",
+]
+
+[[package]]
+name = "tokio"
+version = "1.24.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "597a12a59981d9e3c38d216785b0c37399f6e415e8d0712047620f189371b0bb"
+dependencies = [
+ "autocfg",
+ "num_cpus",
+ "pin-project-lite",
+ "tokio-macros",
+ "windows-sys",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "1.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d266c00fde287f55d3f1c3e96c500c362a2b8c695076ec180f27918820bc6df8"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]

@@ -1,4 +1,10 @@
-fn main() {
-    // TODO: run all sqllogictest files
-    println!("Hello World");
+use sql_logic_test::{db::Sqlite, run};
+
+#[tokio::main]
+async fn main() {
+    let result = run::<Sqlite>("sqllogictest/test/select*.test")
+        .await
+        .unwrap();
+
+    result.into_iter().for_each(|result| result.display());
 }

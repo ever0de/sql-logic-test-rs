@@ -50,11 +50,9 @@ impl Row {
 }
 
 impl Sqlite {
-    const MEMORY_PATH: &str = ":memory:";
-
-    pub fn new() -> Self {
+    pub fn new<T: AsRef<std::path::Path>>(path: T) -> Self {
         Self {
-            connection: sqlite::open(Self::MEMORY_PATH).unwrap(),
+            connection: sqlite::open(path).unwrap(),
         }
     }
 
@@ -108,6 +106,7 @@ impl Sqlite {
                 let label = stmt
                     .column_name(i)
                     .wrap_err(format!("failed column_name, index: {i}"))?;
+
                 let value = stmt
                     .read::<String, _>(i)
                     .wrap_err(format!("failed read, index: {i}"))?;
@@ -130,7 +129,7 @@ impl Sqlite {
 
 impl Default for Sqlite {
     fn default() -> Self {
-        Self::new()
+        Self::new(":memory:")
     }
 }
 
@@ -139,7 +138,7 @@ mod tests {
     use super::*;
 
     fn setup_sqlite() -> Sqlite {
-        let sqlite = Sqlite::new();
+        let sqlite = Sqlite::default();
         sqlite
             .execute("CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)")
             .unwrap();

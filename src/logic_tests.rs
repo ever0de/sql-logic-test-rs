@@ -88,7 +88,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let storage = Sqlite::new();
+        let storage = Sqlite::default();
         let mut tester = sqllogictest::Runner::new(storage);
 
         tester.run_file("./src/slt/basic.slt").unwrap();
@@ -96,7 +96,7 @@ mod tests {
 
     #[test]
     fn select() {
-        let storage = Sqlite::new();
+        let storage = Sqlite::default();
         let mut tester = sqllogictest::Runner::new(storage);
         tester.with_validator(validator);
 
