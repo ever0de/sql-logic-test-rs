@@ -615,6 +615,7 @@ dependencies = [
  "sqlite",
  "sqllogictest",
  "thiserror",
+ "tracing",
 ]
 
 [[package]]

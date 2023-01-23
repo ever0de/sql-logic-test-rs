@@ -80,24 +80,10 @@ impl sqllogictest::DB for Sqlite {
     }
 }
 
-pub fn validator(actual: &[Vec<String>], expected: &[String]) -> bool {
-    if expected.len() == 1 && expected[0].contains("values hashing to") {
-        // println!("{:?} == {expected:?}", actual[0]);
-        return actual[0][0] == expected[0];
-    }
-
-    let normalized_rows = actual
-        .iter()
-        .flat_map(|text| text.to_owned())
-        .collect::<Vec<_>>();
-
-    // println!("{normalized_rows:?} != {expected:?}");
-
-    normalized_rows == expected
-}
-
 #[cfg(test)]
 mod tests {
+    use crate::validator;
+
     use super::*;
 
     #[test]
