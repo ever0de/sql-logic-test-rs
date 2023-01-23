@@ -132,29 +132,25 @@ pub trait Normalizer<D: AsyncDB> {
 
 impl<D: AsyncDB> Normalizer<D> for sqllogictest::Runner<D> {
     fn normalize_tester(&mut self, record: &sqllogictest::Record) {
-        match record {
-            sqllogictest::Record::Query {
-                expected_results, ..
-            } => {
-                if expected_results.len() == 1 && expected_results[0].contains("values hashing to")
-                {
-                    self.with_hash_threshold(1);
-                } else {
-                    self.with_hash_threshold(0);
-                }
+        if let sqllogictest::Record::Query {
+            expected_results, ..
+        } = record
+        {
+            if expected_results.len() == 1 && expected_results[0].contains("values hashing to") {
+                self.with_hash_threshold(1);
+            } else {
+                self.with_hash_threshold(0);
             }
-
-            _ => return,
         }
     }
 }
 
 fn normalize_record(record: sqllogictest::Record) -> Option<sqllogictest::Record> {
     match &record {
-        sqllogictest::Record::Query { sort_mode, .. } => match sort_mode {
-            Some(SortMode::ValueSort) => None,
-            _ => Some(record),
-        },
+        sqllogictest::Record::Query {
+            sort_mode: Some(SortMode::ValueSort),
+            ..
+        } => None,
         _ => Some(record),
     }
 }
